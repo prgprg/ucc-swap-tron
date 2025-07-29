@@ -1,0 +1,52 @@
+HTLCEscrow.sol - Function Overview (ASCII Chart)
+===============================================
+
++-------------------+-------------------+-------------------+
+|   Function        |   Purpose         |   Access          |
++-------------------+-------------------+-------------------+
+| constructor       | Create escrow     | Public, payable   |
+|                   | with TRX, set     |                   |
+|                   | hashlock,         |                   |
+|                   | timelock, parties |                   |
++-------------------+-------------------+-------------------+
+| withdraw          | Taker withdraws   | External, taker   |
+|                   | by revealing      | only, before      |
+|                   | secret            | timelock          |
++-------------------+-------------------+-------------------+
+| cancel            | Maker cancels     | External, maker   |
+|                   | after timelock    | only, after       |
+|                   | expires           | timelock          |
++-------------------+-------------------+-------------------+
+| getStatus         | View escrow       | External, view    |
+|                   | status/details    |                   |
++-------------------+-------------------+-------------------+
+
+
+HTLCEscrow.sol - State Machine (ASCII Diagram)
+==============================================
+
+   [Created]
+      |
+      | taker calls withdraw(secret) && before timelock
+      v
+ [Withdrawn] <-------------------+
+      |                          |
+      |                          |
+      | maker calls cancel()     |
+      | after timelock           |
+      v                          |
+ [Cancelled] <-------------------+
+
+
+HTLCEscrow.sol - Event Flow (ASCII)
+===================================
+
++-------------------+-------------------------------+
+|   Event           |   Emitted When                |
++-------------------+-------------------------------+
+| EscrowCreated     | On contract creation          |
++-------------------+-------------------------------+
+| EscrowWithdrawn   | On successful taker withdraw  |
++-------------------+-------------------------------+
+| EscrowCancelled   | On successful maker cancel    |
++-------------------+-------------------------------+

@@ -1,0 +1,34 @@
+HTLCEscrow.sol - Architecture Overview (ASCII)
+==============================================
+
+Participants:
++--------+        +--------+        +--------+
+| Maker  |<-----> | Escrow |<-----> | Taker  |
++--------+        +--------+        +--------+
+
+Flow:
+1. Maker deploys contract, locking TRX, setting hashlock & timelock
+2. Taker can withdraw by revealing the correct secret before timelock
+3. If timelock expires, Maker can cancel and reclaim funds
+
+Key Variables:
+- maker:    address of escrow creator
+- taker:    address allowed to withdraw
+- hashlock: keccak256(secret)
+- timelock: unix timestamp for cancellation
+- amount:   TRX locked in contract
+- withdrawn/cancelled: state flags
+
+Key Security:
+- Only taker can withdraw (with secret)
+- Only maker can cancel (after timelock)
+- Funds can only be moved once (withdrawn/cancelled)
+
+Events:
+- EscrowCreated
+- EscrowWithdrawn
+- EscrowCancelled
+
+State Transitions:
+[Created] --withdraw(secret)--> [Withdrawn]
+[Created] --cancel(after timelock)--> [Cancelled]
