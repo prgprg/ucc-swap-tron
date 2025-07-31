@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@openzeppelin/test-helpers": "^0.5.16",
+    "tronweb": "^6.0.3"
+  }
+}

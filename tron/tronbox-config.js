@@ -36,11 +36,11 @@ module.exports = {
     development: {
       // For tronbox/tre docker image
       // See https://hub.docker.com/r/tronbox/tre
-      privateKey: '0000000000000000000000000000000000000000000000000000000000000001',
+      privateKey: '142c7ddd2da15e516ca36189087ba703502be7af3cbefab80976eb180d1c2492',
       userFeePercentage: 0,
       feeLimit: 1000 * 1e6,
-      fullHost: 'http://127.0.0.1:9090',
-      network_id: '9'
+      fullHost: "http://localhost:9090",
+      network_id: "9"
     }
   },
   compilers: {
