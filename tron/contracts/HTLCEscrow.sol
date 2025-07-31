@@ -19,7 +19,7 @@ contract HTLCEscrow {
     ) payable {
         maker = msg.sender;
         hashlock = _hashlock;
-        timelock = _timelock;
+        timelock = _timelock; // needs more tesesting
         amount = msg.value;
         withdrawn = false;
         cancelled = false;
@@ -47,6 +47,10 @@ contract HTLCEscrow {
         cancelled = true;
         payable(maker).transfer(amount);
         emit EscrowCancelled(maker);
+    }
+
+    function getEscrowedAmount() external view returns (uint256) {
+        return amount;
     }
 
     function getBalance() external view returns (uint256) {
