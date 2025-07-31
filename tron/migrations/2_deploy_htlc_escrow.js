@@ -5,14 +5,17 @@ const tronWeb = new TronWeb(
     "http://127.0.0.1:9090",
     "http://127.0.0.1:9090",
     "http://127.0.0.1:9090",
-    '142c7ddd2da15e516ca36189087ba703502be7af3cbefab80976eb180d1c2492',
+    '2480efa25a940e8dc6c2f13ffc9d1b6aa247721e7fc432323737092401a76d51',
 );
 module.exports = function(deployer, network, accounts) {
-    maker = tronWeb.address.fromPrivateKey(process.env.PRIVATE_KEY);
+
+  const maker = tronWeb.address.fromPrivateKey(process.env.PRIVATE_KEY);
+  console.log("Deploying HTLCEscrow with maker address:", maker);
 
   // Placeholder parameters — tests will deploy with actual values
   const placeholderHashlock = "0x" + "0".repeat(64);
-  const placeholderTimelock = Math.floor(Date.now() / 1000) + 3600; // 1-hour later
+  const placeholderTimelock = Math.floor(Date.now() / 1000) + 60; // 1 minute later
+  const placeholderAmount = tronWeb.toSun(3); // 3 TRX in Sun
 
   deployer.deploy(
     HTLCEscrow,
@@ -20,8 +23,8 @@ module.exports = function(deployer, network, accounts) {
     placeholderTimelock,
     {
       from: maker,
-      value: TronWeb.toSun(3), // 1 TRX as a placeholder
-      fee_limit: 100000000,
+      value: placeholderAmount,
+      fee_limit: 1000*1e6,
       consume_user_resource_percent: 30
     }
   ).then(instance => {

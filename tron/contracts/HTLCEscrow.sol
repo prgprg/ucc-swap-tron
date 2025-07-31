@@ -8,7 +8,6 @@ contract HTLCEscrow {
     uint256 public timelock;
     bool public withdrawn;
     bool public cancelled;
-    address public taker;
 
     event EscrowCreated(address indexed maker, uint256 amount, bytes32 hashlock, uint256 timelock);
     event EscrowWithdrawn(address indexed taker, bytes32 secret);
@@ -16,7 +15,7 @@ contract HTLCEscrow {
 
     constructor(
         bytes32 _hashlock,
-        uint256 _timelock
+        uint256 _timelock   
     ) payable {
         maker = msg.sender;
         hashlock = _hashlock;
@@ -24,7 +23,6 @@ contract HTLCEscrow {
         amount = msg.value;
         withdrawn = false;
         cancelled = false;
-        taker = address(0);
         emit EscrowCreated(maker, amount, hashlock, timelock);
     }
 
@@ -36,7 +34,6 @@ contract HTLCEscrow {
         require(_taker != address(0), "Invalid taker");
 
         withdrawn = true;
-        taker = _taker;
         payable(_taker).transfer(amount);
         emit EscrowWithdrawn(_taker, _secret);
     }
@@ -61,7 +58,6 @@ contract HTLCEscrow {
         view
         returns (
             address _maker,
-            address _taker,
             uint256 _amount,
             bytes32 _hashlock,
             uint256 _timelock,
@@ -70,11 +66,11 @@ contract HTLCEscrow {
             uint256 _currentTime
         )
     {
-        return (maker, taker, address(this).balance, hashlock, timelock, withdrawn, cancelled, block.timestamp);
+        return (maker, amount, hashlock, timelock, withdrawn, cancelled, block.timestamp);
     }
 
     function isValidSecret(bytes32 _secret) external view returns (bool) {
-        return keccak256(abi.encodePacked(_secret)) == hashlock;
+        return sha256(abi.encodePacked(_secret)) == hashlock;
     }
 
     function isActive() external view returns (bool) {
